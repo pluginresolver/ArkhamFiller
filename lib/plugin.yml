@@ -1,0 +1,7 @@
+name: ArkhamFiller
+main: org.arkhamnetwork.filler.ArkhamFiller
+version: 1.0
+description: GUI Filler
+depend: [RedCore, ArkhamMenus]
+commands:
+  filler:
