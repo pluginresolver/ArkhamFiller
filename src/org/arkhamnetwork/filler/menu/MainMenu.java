@@ -67,7 +67,7 @@ public class MainMenu extends Menu {
 
                     new BukkitRunnable() {
                         public void run() {
-                            pl.openInventory(ArkhamFiller.getInstance().getSingleFillMenu().getConstructInventory().apply(pl, new ItemStack(item.getType())));
+                            pl.openInventory(ArkhamFiller.getInstance().getSingleFillMenu().getConstructInventory().apply(pl, new ItemStack(type)));
                         }
                     }.runTaskLater(ArkhamFiller.getInstance(), 1L);
 

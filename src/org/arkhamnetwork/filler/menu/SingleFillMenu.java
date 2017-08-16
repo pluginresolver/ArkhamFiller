@@ -26,10 +26,12 @@ import java.util.List;
  */
 public class SingleFillMenu extends TypedMenu<ItemStack> {
 
-    private List<ItemStack> items = new ArrayList<>();
+    private List<ItemStack> items;
 
     public SingleFillMenu() {
         super("Filler");
+
+        items = new ArrayList<>();
 
         setConstructInventory((player, typed) -> {
             Inventory inv = Bukkit.createInventory(null, 54, "Filler");
@@ -45,6 +47,8 @@ public class SingleFillMenu extends TypedMenu<ItemStack> {
 
                 if (s.getType() == typed.getType()) {
 
+                    System.out.println("Same type");
+
 
                     ItemStack i = typed.clone();
                     ItemMeta meta = i.getItemMeta();
@@ -54,6 +58,8 @@ public class SingleFillMenu extends TypedMenu<ItemStack> {
 
                     inv.setItem(count, i);
                     items.add(i);
+
+                    System.out.println(items.size() + " SIZE");
                     count++;
 
                     if (count > 54) {
