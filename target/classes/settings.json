@@ -1,16 +1,24 @@
 {
   "menu-items": [
     {
-      "display-name": "Chests",
-      "display-item": "CHEST",
+      "lore": [
+        "Left click for single fill",
+        "Right click to fill all"
+      ],
+      "display-name": "Hopper",
+      "display-item": "HOPPER",
       "display-slot": 0
     },
     {
-      "display-name": "Hoppers",
-      "display-item": "HOPPER",
+      "lore": [
+        "Left click for single fill",
+        "Right click to fill all"
+      ],
+      "display-name": "Chests",
+      "display-item": "CHEST",
       "display-slot": 1
     }
   ],
   "range": 10,
-  "master-g-u-i-title": "Master GUI"
+  "master-g-u-i-title": "Filler GUI"
 }

@@ -34,11 +34,7 @@ public class MainMenu extends Menu {
 
             for (int i = 0; i < items.size(); i++) {
 
-                ItemStack item = new ItemStack(items.get(i).getDisplayItem(), 1);
-                ItemMeta meta = item.getItemMeta();
-
-                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', items.get(i).getDisplayName()));
-                item.setItemMeta(meta);
+                ItemStack item = items.get(i).toItem();
 
                 inv.setItem(i, item);
             }
@@ -51,10 +47,7 @@ public class MainMenu extends Menu {
 
             MenuButton button = new MenuButton();
 
-            ItemStack item = new ItemStack(menuItem.getDisplayItem());
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(menuItem.getDisplayName());
-            item.setItemMeta(meta);
+            ItemStack item = menuItem.toItem();
 
             int i = menuItem.getDisplaySlot();
 
@@ -70,14 +63,11 @@ public class MainMenu extends Menu {
 
                     Location playerLocation = pl.getLocation();
 
-                    SingleFillMenu singleFillMenu = new SingleFillMenu(item);
-                    ArkhamFiller.getInstance().getMenuManager().addMenu(singleFillMenu);
-
                     pl.closeInventory();
 
                     new BukkitRunnable() {
                         public void run() {
-                            pl.openInventory(singleFillMenu.getConstructInventory().apply(pl));
+                            pl.openInventory(ArkhamFiller.getInstance().getSingleFillMenu().getConstructInventory().apply(pl, new ItemStack(item.getType())));
                         }
                     }.runTaskLater(ArkhamFiller.getInstance(), 1L);
 

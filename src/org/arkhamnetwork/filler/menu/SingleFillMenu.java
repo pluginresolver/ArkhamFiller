@@ -1,7 +1,10 @@
 package org.arkhamnetwork.filler.menu;
 
 import org.arkhamnetwork.arkhammenus.absraction.Menu;
+import org.arkhamnetwork.arkhammenus.absraction.TypedMenu;
 import org.arkhamnetwork.arkhammenus.menus.MenuButton;
+import org.arkhamnetwork.arkhammenus.menus.TypedMenuButton;
+import org.arkhamnetwork.arkhammenus.menus.TypedSelector;
 import org.arkhamnetwork.filler.ArkhamFiller;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -21,18 +24,15 @@ import java.util.List;
 /**
  * Created by Matt on 15/08/2017.
  */
-public class SingleFillMenu extends Menu {
-
-    private ItemStack item;
+public class SingleFillMenu extends TypedMenu<ItemStack> {
 
     private List<ItemStack> items = new ArrayList<>();
 
-    public SingleFillMenu(ItemStack item) {
-        super("Fill " + item.getItemMeta().getDisplayName());
-        this.item = item;
+    public SingleFillMenu() {
+        super("Filler");
 
-        setConstructInventory((player -> {
-            Inventory inv = Bukkit.createInventory(null, 54, "Fill " + item.getItemMeta().getDisplayName());
+        setConstructInventory((player, typed) -> {
+            Inventory inv = Bukkit.createInventory(null, 54, "Filler");
 
             Location playerLocation = player.getLocation();
 
@@ -43,17 +43,17 @@ public class SingleFillMenu extends Menu {
 
             for (BlockState s : c.getTileEntities()) {
 
-                if (s.getType() == item.getType()) {
+                if (s.getType() == typed.getType()) {
 
 
-                    ItemStack i = item.clone();
+                    ItemStack i = typed.clone();
                     ItemMeta meta = i.getItemMeta();
 
                     meta.setDisplayName("X: " + s.getX() + " Y: " + s.getY() + " Z: " + s.getZ());
                     i.setItemMeta(meta);
 
                     inv.setItem(count, i);
-
+                    items.add(i);
                     count++;
 
                     if (count > 54) {
@@ -63,15 +63,17 @@ public class SingleFillMenu extends Menu {
             }
 
             return inv;
-        }));
+        });
+        final int[] count = {0};
 
         items.forEach(i -> {
-            int count = 0;
 
+            System.out.println("Constructing button " + i);
 
-            MenuButton button = new MenuButton();
+            TypedMenuButton<ItemStack> button = new TypedMenuButton<>();
 
-            button.setClickAction((click, player) -> {
+            button.setAction((click, item, player) -> {
+                System.out.println("Action");
                 Location loc = getLocationFromString(player, i.getItemMeta().getDisplayName());
 
                 System.out.println(loc.getBlockX());
@@ -81,7 +83,11 @@ public class SingleFillMenu extends Menu {
 
                 Block block = player.getWorld().getBlockAt(loc);
 
-                if (block instanceof ContainerBlock) {
+                BlockState state = block.getState();
+
+                System.out.println("Detecting click on typed menu");
+
+                if (state instanceof ContainerBlock) {
 
                     ContainerBlock container = (ContainerBlock) block;
 
@@ -95,9 +101,9 @@ public class SingleFillMenu extends Menu {
                 }
 
             });
-            setButton(count, button);
+            setButton(count[0], button);
 
-            count++;
+            count[0]++;
         });
     }
 
@@ -110,5 +116,10 @@ public class SingleFillMenu extends Menu {
         int z = Integer.parseInt(split[5]);
 
         return new Location(player.getWorld(), x, y, z);
+    }
+
+    @Override
+    public TypedSelector getSelector() {
+        return new TypedSelector();
     }
 }

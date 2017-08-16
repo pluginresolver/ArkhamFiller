@@ -34,6 +34,9 @@ public class ArkhamFiller extends JavaPlugin implements RedPlugin {
     @Getter
     private MenuManager menuManager;
 
+    @Getter
+    private SingleFillMenu singleFillMenu;
+
     private ConfigManager<SettingsConfig> cfg;
 
     @Getter
@@ -48,10 +51,17 @@ public class ArkhamFiller extends JavaPlugin implements RedPlugin {
         cfg.init(this);
 
         menuManager = Menus.getInstance().getMenuManager();
-
-        menuManager.addMenu(mainMenu = new MainMenu());
+        registerMenus();
 
         getCommand("filler").setExecutor(new FillerCommand());
+    }
+
+    public void registerMenus() {
+        mainMenu = new MainMenu();
+        singleFillMenu = new SingleFillMenu();
+
+        menuManager.addMenu(mainMenu);
+        menuManager.addTypedMenu(singleFillMenu);
     }
 
     public void reloadConfigs() {
